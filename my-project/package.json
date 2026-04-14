@@ -1,0 +1,21 @@
+{
+  "name": "my-project",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.0.4"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "gl-matrix": "^3.4.4",
+    "motion": "^12.38.0",
+    "ogl": "^1.0.11",
+    "tailwindcss": "^4.2.2"
+  }
+}

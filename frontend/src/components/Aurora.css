@@ -1,0 +1,22 @@
+.aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Soft global bloom like reference — keeps vertical “curtain” edges misty */
+.aurora-canvas-wrap {
+  position: absolute;
+  inset: -8% -5% -5% -5%;
+  filter: blur(18px) saturate(1.12);
+  opacity: 0.94;
+  transform: translateZ(0);
+}
+
+.aurora canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

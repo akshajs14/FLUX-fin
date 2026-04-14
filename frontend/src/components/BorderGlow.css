@@ -1,0 +1,75 @@
+.border-glow {
+  position: relative;
+  display: block;
+  border-radius: var(--r, 16px);
+  background: var(--bg, #060010);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.border-glow--w100 {
+  width: 100%;
+}
+
+.border-glow--inline-flex {
+  display: inline-flex;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+.border-glow--inline-flex .border-glow__inner {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.border-glow--flex {
+  display: flex;
+  min-width: 0;
+}
+
+.border-glow--flex .border-glow__inner {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.border-glow__aura {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: calc(0.06 + var(--edge, 0) * 0.94);
+  transition: opacity 0.1s ease-out;
+  background:
+    radial-gradient(
+      ellipse var(--glow-r, 120px) var(--glow-r, 120px) at var(--mx, 50%) var(--my, 50%),
+      rgba(var(--glow-rgb), 0.42) 0%,
+      transparent 58%
+    ),
+    conic-gradient(from var(--angle, 0deg) at 50% 50%, var(--conic, #c084fc 0deg, #f472b6 120deg, #38bdf8 240deg, #c084fc 360deg));
+  filter: blur(0.75px);
+  mix-blend-mode: screen;
+}
+
+.border-glow--animated .border-glow__aura {
+  animation: border-glow-hue 12s linear infinite;
+}
+
+@keyframes border-glow-hue {
+  to {
+    filter: blur(0.75px) hue-rotate(360deg);
+  }
+}
+
+.border-glow__inner {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+  background: var(--bg, #060010);
+  margin: 1px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
