@@ -322,7 +322,7 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
     if (stressedZones.length === 0) {
       return [
         'Flux AI: idle — no zone stress applied',
-        'Twin reflects nominal inputs; run prediction to pull Foundry forecasts',
+        'Twin reflects nominal inputs; run prediction to generate AI forecasts',
       ];
     }
     return stressedZones.map(z => {
@@ -340,7 +340,7 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
   }, [recommendations, stressedZones, zoneStates]);
 
   /**
-   * Wave palette: Foundry risk when available; otherwise reflect **scenario stress** (zones you turned up).
+   * Wave palette: AI risk when available; otherwise reflect **scenario stress** (zones you turned up).
    * Previously we only looked at `modelResult`, so with no run or no `risk_score` in the payload the grid
    * stayed “ok” green even at 100% surge — that mismatch is fixed here.
    */
@@ -420,10 +420,10 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
       <div className="sec-header">
         <div className="sec-label">Scenario Simulation</div>
         <div className="sec-title">Live Model Integration</div>
-        <div className="sec-sub">Palantir Foundry ML · {MODEL_DISPLAY_RID}</div>
+        <div className="sec-sub">Flux AI Engine</div>
         <div className="sec-desc">
           Inject real-world stress scenarios — power surges, outages, renewable fluctuations —
-          and send live zone state to the Palantir Foundry ML deployment. The model returns
+          and run the built-in Flux AI prediction engine. The model returns
           per-zone demand predictions which drive AI response recommendations.
         </div>
       </div>
@@ -573,7 +573,7 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
 
         {authState === 'error' ? (
           <button className="sim-run-btn auth" onClick={handleConnect} type="button">
-            🔐 Connect to Palantir Foundry
+            🔐 Connect to Flux AI
           </button>
         ) : (
           <button
@@ -606,7 +606,7 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
           <div className="sim-results-header">
             <div className="c-t">Model Response <span style={{ color: 'var(--green)', marginLeft: 8 }}>● Live</span></div>
             <div className="sim-results-meta">
-              Foundry ML · {new Date().toLocaleTimeString('en-US', { hour12: false })}
+              Flux AI · {new Date().toLocaleTimeString('en-US', { hour12: false })}
             </div>
           </div>
 
@@ -830,7 +830,7 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
               ))}
             </ul>
             {modelResult && recommendations.length > 0 && (
-              <div className="sim-twin-viz-foot">Recommendations driven by latest Foundry prediction run</div>
+              <div className="sim-twin-viz-foot">Recommendations driven by latest AI prediction run</div>
             )}
           </div>
         </div>
