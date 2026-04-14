@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { auth } from '../lib/palantir';
+// Palantir auth removed — predictions now run locally
 import { GlowFrame } from './GlowFrame';
 import {
   buildDemandLags,
@@ -303,23 +303,15 @@ export function SimulationSection({ currentTotalDemand }: SimulationSectionProps
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.toLowerCase().includes('auth') || msg.toLowerCase().includes('401') || msg.toLowerCase().includes('403')) {
-        setAuthState('error');
-        setModelError('Authentication required. Click "Connect to Foundry" to authenticate with Palantir.');
-      } else {
-        setModelError(`Model error: ${msg}`);
-      }
+      setModelError(`Model error: ${msg}`);
     } finally {
       setLoading(false);
     }
   }, [buildInputs]);
 
   const handleConnect = useCallback(async () => {
-    setAuthState('authenticating');
-    // signIn() redirects the browser to Foundry login.
-    // The AuthCallback page handles the return and token exchange,
-    // then redirects back here. No catch needed — navigation leaves the page.
-    await auth.signIn();
+    // No external auth needed — predictions run locally
+    setAuthState('authenticated');
   }, []);
 
   const stressedZones = ZONES.filter(z => zoneStates[z.id].stressType !== 'none');

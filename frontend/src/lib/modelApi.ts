@@ -1,5 +1,4 @@
-import { LiveDeployments } from '@osdk/foundry.models';
-import { MODEL_RID, palantirClient } from './palantir';
+import { runLocalPrediction } from './localModel';
 
 // ─── Input Schema ─────────────────────────────────────────────────────────────
 export interface ZoneInput {
@@ -173,41 +172,9 @@ export function buildDemandLags(currentDemand: number, zoneDemandHistory?: numbe
   };
 }
 
-// ─── Main API call ─────────────────────────────────────────────────────────────
+// ─── Main API call (local model — no Palantir dependency) ───────────────────
 export async function runZonePrediction(zones: ZoneInput[]): Promise<ModelResult> {
-  const response = await LiveDeployments.transformJson(
-    palantirClient,
-    MODEL_RID,
-    { input: { input_df: zones } },
-    { preview: true }
-  );
-
-  const rawUnknown = response as unknown;
-  const raw = rawUnknown as Record<string, unknown>;
-
-  // The model may return predictions in various shapes — handle all of them
-  let predictions: ZonePrediction[] = [];
-
-  if (Array.isArray(rawUnknown)) {
-    predictions = rawUnknown as ZonePrediction[];
-  } else if (Array.isArray(raw['output_df'])) {
-    predictions = raw['output_df'] as ZonePrediction[];
-  } else if (raw['output_df'] && typeof raw['output_df'] === 'object') {
-    const od = raw['output_df'] as Record<string, unknown>;
-    if (Array.isArray(od['rows'])) predictions = od['rows'] as ZonePrediction[];
-  } else if (Array.isArray(raw['output'])) {
-    predictions = raw['output'] as ZonePrediction[];
-  } else if (raw['predictions'] && Array.isArray(raw['predictions'])) {
-    predictions = raw['predictions'] as ZonePrediction[];
-  } else if (raw['data'] && Array.isArray(raw['data'])) {
-    predictions = raw['data'] as ZonePrediction[];
-  } else {
-    predictions = [raw as ZonePrediction];
-  }
-
-  predictions = collapseModelOutputRows(predictions).map(normalizePredictionRow);
-
-  return { predictions, rawResponse: rawUnknown };
+  return runLocalPrediction(zones);
 }
 
 /** Pull P10 / P50 / P90 from Foundry-style `quantiles` objects. */
